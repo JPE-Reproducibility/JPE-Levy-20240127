@@ -1,0 +1,650 @@
+{
+  "coverage": {
+    "by_claim_type": {
+      "data_source": 90.9,
+      "figure": 83.3,
+      "table": 87.5
+    },
+    "n_claims": 56,
+    "overall": 85.7
+  },
+  "orphan_code_files": [
+    "offline/stata/_/_gtools_internal.ado",
+    "offline/stata/d/distinct.ado",
+    "offline/stata/f/fasterxtile.ado",
+    "offline/stata/g/gcollapse.ado",
+    "offline/stata/g/gcontract.ado",
+    "offline/stata/g/gdistinct.ado",
+    "offline/stata/g/gduplicates.ado",
+    "offline/stata/g/gegen.ado",
+    "offline/stata/g/gglm.ado",
+    "offline/stata/g/gisid.ado",
+    "offline/stata/g/givregress.ado",
+    "offline/stata/g/glevelsof.ado",
+    "offline/stata/g/gpoisson.ado",
+    "offline/stata/g/gquantiles.ado",
+    "offline/stata/g/greg.ado",
+    "offline/stata/g/gregress.ado",
+    "offline/stata/g/greshape.ado",
+    "offline/stata/g/gstats.ado",
+    "offline/stata/g/gtools.ado",
+    "offline/stata/g/gtop.ado",
+    "offline/stata/g/gtoplevelsof.ado",
+    "offline/stata/g/gunique.ado",
+    "offline/stata/h/hashsort.ado",
+    "offline/stata/u/unique.ado",
+    "offline/setup.R",
+    "offline/setup.sh",
+    "renv/activate.R",
+    "code/util/record_resources.sh",
+    "code/util/setup_system_r.R",
+    "code/util/config.R",
+    "code/util/log.R",
+    "code/util/write_csv_copies.R",
+    "code/util/create_folders.R",
+    "code/process/paths.R",
+    "code/process/stata.R",
+    "code/process/utils.do",
+    "code/documents/compilePaper.R",
+    "code/documents/input_common/model_flow.tex",
+    "code/model/bootstrap_checks.R",
+    "Makefile"
+  ],
+  "verdicts": [
+    {
+      "claim_type": "data_source",
+      "claim_label": "Integrated Values Survey (WVS/EVS trend file)",
+      "verdict": "Matched",
+      "rationale": "Stage A traces cleaned IVS/WVS files (full_clean_ivs, ivs_selected_countries_*, wvs_clean_*_waves) to .do and .R files. README structure lists raw WVS_Trend_v2_0.dta and EVS ZA7503 files. Earlier waves 1–6 files also exist.",
+      "supporting_files": [
+        "code/process/ivs/keep_subset_variables_countries.do",
+        "code/process/ivs/save_specific_waves.do",
+        "code/process/merge/EVS_WVS_Merge.do",
+        "code/process/ivs/clean_opinions.do",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "data_source",
+      "claim_label": "Comparative Manifesto Project (CMP) and manifesto texts / DeepL",
+      "verdict": "Matched",
+      "rationale": "manifesto.csv/.dta and manifesto_parties.rds are referenced by many code files. The package has import_manifesto.do and clean_manifesto_parties.R, and raw MPDS2021a files are listed. Authored manifesto_texts files exist. No DeepL-specific script was visible, but the core CMP source is matched.",
+      "supporting_files": [
+        "code/import/import_manifesto.do",
+        "code/process/manifesto/clean_manifesto_parties.R",
+        "code/process/manifesto/measure_manifesto_style.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "data_source",
+      "claim_label": "The PopuList",
+      "verdict": "Matched",
+      "rationale": "import_PopuList.do and merge_IVS_PopuList.do exist. merge_manifesto_populist.R produces manifesto_populist.rds, which Stage A shows is used by many analysis scripts. 'The PopuList 3.0.csv' is listed in the README audit.",
+      "supporting_files": [
+        "code/import/import_PopuList.do",
+        "code/process/merge/merge_IVS_PopuList.do",
+        "code/process/merge/merge_manifesto_populist.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "data_source",
+      "claim_label": "Party leader demographics (Wikipedia) and IPUMS 2023 wages",
+      "verdict": "Matched",
+      "rationale": "Stage A links wage_occ_2023 to prepare_wage_occ.R, clean_party_leaders.R and femaleShareGraph.R. party_leaders.rds is referenced by clean_party_leaders.R and others. Raw cps_00047 and authorcreated party_leaders.csv are listed.",
+      "supporting_files": [
+        "code/process/ipums/prepare_wage_occ.R",
+        "code/process/demographics/clean_party_leaders.R",
+        "code/process/demographics/process_supply_data.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "data_source",
+      "claim_label": "Share of female legislators (Weeks, Adams et al., Global Legislator Database)",
+      "verdict": "Matched",
+      "rationale": "ivs_femaleShare.RDS is referenced by femShareMatch_closestYear.R and process_supply_data.R. The README audit lists global_legislator_database, Replication_data.RData and multilevel_1-5-22.Rdata.",
+      "supporting_files": [
+        "code/process/demographics/femShareMatch_closestYear.R",
+        "code/process/demographics/process_supply_data.R",
+        "code/analyze/party_positions/femaleShareGraph.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "data_source",
+      "claim_label": "Party Facts",
+      "verdict": "Matched",
+      "rationale": "import_partyfacts.do and merge_IVS_Partyfact.do exist. partyfacts-external-parties.csv is listed in the README audit.",
+      "supporting_files": [
+        "code/import/import_partyfacts.do",
+        "code/process/merge/merge_IVS_Partyfact.do",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "data_source",
+      "claim_label": "ParlGov",
+      "verdict": "Matched",
+      "rationale": "import_parlgov.do and merge_IVS_Parlgov.do exist. Stage A shows merge_IVS_Parlgov.do referencing the manifesto data.",
+      "supporting_files": [
+        "code/import/import_parlgov.do",
+        "code/process/merge/merge_IVS_Parlgov.do",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "data_source",
+      "claim_label": "German Politbarometer",
+      "verdict": "Matched",
+      "rationale": "Stage A shows politbarometer.rds referenced by GG2.R and prepare_supporting_data.R. The README audit lists the raw Politbarometer_ZA2391 file.",
+      "supporting_files": [
+        "code/analyze/case_studies/GG2.R",
+        "code/process/analysis_inputs/prepare_supporting_data.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "data_source",
+      "claim_label": "Perspective API insults; CAP, Polidoc, Manifesto Vault supplementary texts",
+      "verdict": "Matched",
+      "rationale": "insult_scores_google.rds exists in both cleandata and authorcreated. measure_manifesto_style.R is plausibly the script that computes the insult score. The authorcreated MissingManifestos/manifesto_texts.csv fits the supplementary texts. Stage A links insult_scores_google.rds only to preflight.R, so the tracing is indirect.",
+      "supporting_files": [
+        "code/process/manifesto/measure_manifesto_style.R",
+        "code/util/preflight.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "data_source",
+      "claim_label": "GPT-4o classification of manifesto clauses as pledges",
+      "verdict": "Matched",
+      "rationale": "Pledge scripts exist: load_pledge_data.R, process_pledge.R and prepare_pledge.R. The authorcreated Pledges/ClassifiedManifestos.csv and manifesto_parties_pledge.rds are listed. Stage A shows process_pledge.R and prepare_pledge.R referencing manifesto data.",
+      "supporting_files": [
+        "code/process/manifesto/process_pledge.R",
+        "code/process/manifesto/load_pledge_data.R",
+        "code/process/analysis_inputs/prepare_pledge.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "data_source",
+      "claim_label": "Ipsos 2009 aggregate polling (UKIP/BNP)",
+      "verdict": "Missing",
+      "rationale": "The file listings show no Ipsos data and no script that references it. It is probably a text-only external citation.",
+      "supporting_files": []
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table 1 (tab:sum_stat)",
+      "verdict": "Matched",
+      "rationale": "analyze_desc_stat_manifesto.R reads manifesto and populist data plus wvs_top5_vars.rds, which prepare_wvs_summary.R produces. This fits the party-characteristic and voter-attribute panels. analyze_desc_stats_wvs.R and create_party_leader_var_table.R are also plausible contributors.",
+      "supporting_files": [
+        "code/analyze/party_positions/analyze_desc_stat_manifesto.R",
+        "code/process/analysis_inputs/prepare_wvs_summary.R",
+        "code/analyze/voter_attributes/analyze_desc_stats_wvs.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table A.1 (tab:prrp_parties)",
+      "verdict": "Plausible",
+      "rationale": "rrp_parties.R is plausibly the script that lists PRRPs. manifesto_populist.rds is available. Stage A shows no direct trace for rrp_parties.R.",
+      "supporting_files": [
+        "code/analyze/party_positions/rrp_parties.R",
+        "code/process/merge/merge_manifesto_populist.R"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table A.2 (tab:ivs_data)",
+      "verdict": "Matched",
+      "rationale": "Stage A shows IVS_data_desc_tables.R referencing ivs_selected_countries_with_manifesto and ivs_to_manifesto.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/IVS_data_desc_tables.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table A.3 (tab:decomposition_table)",
+      "verdict": "Plausible",
+      "rationale": "The model scripts cover estimation, decomposition and bootstrap: estimate_all.R, estimate_wave.R, decompose_delta.R, bootstrap.R and create_inference_table.R. No Stage A trace shows the table being produced.",
+      "supporting_files": [
+        "code/model/decompose_delta.R",
+        "code/model/bootstrap.R",
+        "code/model/bootstrap_analysis.R",
+        "code/analyze/priorities_and_model/create_inference_table.R"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table A.4 (tab:manifesto_rhetoric_sum_stats)",
+      "verdict": "Matched",
+      "rationale": "analyze_desc_stat_manifesto.R references manifesto data and descriptive_summary.rds, which prepare_manifesto_summary.R produces. Rhetoric measures come from measure_manifesto_style.R.",
+      "supporting_files": [
+        "code/analyze/party_positions/analyze_desc_stat_manifesto.R",
+        "code/process/analysis_inputs/prepare_manifesto_summary.R",
+        "code/process/manifesto/measure_manifesto_style.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table A.5 (tab:party_entry_list)",
+      "verdict": "Matched",
+      "rationale": "create_party_entry_table.R references manifesto.csv and manifesto.dta in Stage A.",
+      "supporting_files": [
+        "code/analyze/party_positions/create_party_entry_table.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table A.6 (tab:manifesto_rhetoric_consistency)",
+      "verdict": "Matched",
+      "rationale": "check_manifesto_rhetoric_consistency_demean.R references manifesto data in Stage A.",
+      "supporting_files": [
+        "code/analyze/party_positions/check_manifesto_rhetoric_consistency_demean.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table A.7 (tab:ivs_data_match)",
+      "verdict": "Matched",
+      "rationale": "IVS_data_desc_tables.R references the IVS-to-manifesto merged files, and merge_IVS_Manifesto.do creates them.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/IVS_data_desc_tables.R",
+        "code/process/merge/merge_IVS_Manifesto.do",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table A.8 (tab:shy_voters)",
+      "verdict": "Matched",
+      "rationale": "analyze_shy_voters.R references full_clean_ivs, ivs_selected_countries_imputed_with_manifesto and manifesto data in Stage A.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/analyze_shy_voters.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table B.1 (tab:manifesto_vars)",
+      "verdict": "Matched",
+      "rationale": "create_manifesto_var_table.R references manifesto data. manifesto_indices.rds and the authorcreated codebook_categories_MPDS2021a_indices.csv are listed.",
+      "supporting_files": [
+        "code/analyze/party_positions/create_manifesto_var_table.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table B.2 (tab:leader_code_book)",
+      "verdict": "Matched",
+      "rationale": "create_party_leader_var_table.R references party_leaders.rds, imputation_summary.rds, ivs_femaleShare.RDS and manifesto data.",
+      "supporting_files": [
+        "code/analyze/party_positions/create_party_leader_var_table.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "table",
+      "claim_label": "Table B.3 (tab:ivs_vars)",
+      "verdict": "Plausible",
+      "rationale": "create_wvs_var_table.R plausibly builds it. The inputs wvs_variables.rds and variable_list.csv are listed, but Stage A shows no direct trace in the portion I read.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/create_wvs_var_table.R"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure 1 (fig:populist_support)",
+      "verdict": "Matched",
+      "rationale": "analyze_prrp_rise.R references manifesto and populist data in Stage A.",
+      "supporting_files": [
+        "code/analyze/party_positions/analyze_prrp_rise.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure 3 (fig:weights_static)",
+      "verdict": "Matched",
+      "rationale": "plot_weight_static_parfam_bar.R references manifesto and populist data. get_weights.R is also referenced.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/plot_weight_static_parfam_bar.R",
+        "code/model/get_weights.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure 4 (fig:decomposition)",
+      "verdict": "Plausible",
+      "rationale": "plotDecomposition.R, functions_for_plotDecomposition.R and decompose_delta.R exist. No Stage A trace was seen.",
+      "supporting_files": [
+        "code/analyze/decomposition/plotDecomposition.R",
+        "code/analyze/decomposition/functions_for_plotDecomposition.R",
+        "code/model/decompose_delta.R"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure 5 (fig:decomposition_robustness)",
+      "verdict": "Plausible",
+      "rationale": "DecompositionRobustnessGraph.R and 'permutate order.R' (Shorrocks-Shapley orders) exist. The leave-country-out scripts are leave_country_out.R, LCO_master.R, decomposition_lco.R and run_loo.R. The pledge and rhetoric variants have their own scripts.",
+      "supporting_files": [
+        "code/analyze/decomposition/DecompositionRobustnessGraph.R",
+        "code/analyze/decomposition/permutate order.R",
+        "code/model/leave_country_out.R",
+        "code/model/LCO_master.R"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure 6 (fig:weights_dynamic)",
+      "verdict": "Matched",
+      "rationale": "plot_weight_dem_op_slide.R and func_plot_weight.R reference manifesto data, prrp_profiles.rds and manifesto_populist.rds.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/plot_weight_dem_op_slide.R",
+        "code/analyze/priorities_and_model/func_plot_weight.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure 7 (fig:heat_map)",
+      "verdict": "Plausible",
+      "rationale": "waves1to6_heatmap.R references manifesto data and is likely the heatmap script. Whether the 2005–2020 version is in the same script is not visible.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/waves1to6_heatmap.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure 8 (fig:hetero_prior_prrp)",
+      "verdict": "Matched",
+      "rationale": "hetero_priorities_prrp.R references prrp_profiles.rds, manifesto data and manifesto_populist.rds.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/hetero_priorities_prrp.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure 9 (fig:populist_score_agg)",
+      "verdict": "Matched",
+      "rationale": "analyze_voter_opinion_trend.R references prrp_score.rds and prrp_score_covariate_ranking.rds.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/analyze_voter_opinion_trend.R",
+        "code/process/analysis_inputs/prepare_prrp_scores.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure 10 (fig:counterfactual_france)",
+      "verdict": "Matched",
+      "rationale": "reserviors.R references us_voters.rds, which prepare_us_voters.R creates. map_populist_support.R references manifesto data and is the likely mapping script.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/reserviors.R",
+        "code/process/analysis_inputs/prepare_us_voters.R",
+        "code/analyze/voter_attributes/map_populist_support.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure 11 (fig:prr_index_change)",
+      "verdict": "Matched",
+      "rationale": "analyze_party_family_positions.R references manifesto and populist data.",
+      "supporting_files": [
+        "code/analyze/party_positions/analyze_party_family_positions.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.2 (fig:populist_score_cor)",
+      "verdict": "Matched",
+      "rationale": "analyze_populist_voters.R references prrp_profiles.rds and manifesto data.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/analyze_populist_voters.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.3 (fig:party_correlation)",
+      "verdict": "Matched",
+      "rationale": "analyze_party_correlation.R and corFunctions.R exist, and Stage A shows the former referencing manifesto data.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/analyze_party_correlation.R",
+        "code/analyze/voter_attributes/corFunctions.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.4 (fig:phi_all)",
+      "verdict": "Plausible",
+      "rationale": "plot_phi_with_new_Zs.R is a plausibly named script, and Phi comes from the estimation scripts. Stage A shows no direct trace.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/plot_phi_with_new_Zs.R",
+        "code/model/estimate_all.R"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.5 (fig:decomposition_robustness_app)",
+      "verdict": "Plausible",
+      "rationale": "DecompositionRobustnessGraph.R is plausible. The wvs_clean_4to6 variants (with_CZSK, no_dem) and manifesto_parties_withCZSK.rds support the CZSK and no-demographics variants.",
+      "supporting_files": [
+        "code/analyze/decomposition/DecompositionRobustnessGraph.R",
+        "code/process/ivs/save_specific_waves.do",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.6 (fig:alternative_cmp)",
+      "verdict": "Matched",
+      "rationale": "prosser_weights.R references manifesto data, and alternative_indices.R builds the alternative indices.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/prosser_weights.R",
+        "code/process/manifesto/alternative_indices.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.7 (fig:alternative_indices)",
+      "verdict": "Plausible",
+      "rationale": "alternative_indices.R and the weight plotting scripts plausibly cover the Hawk-Dove, European integration and government efficiency indices.",
+      "supporting_files": [
+        "code/process/manifesto/alternative_indices.R",
+        "code/analyze/priorities_and_model/func_plot_weight.R"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.8 (fig:germany_case_study)",
+      "verdict": "Matched",
+      "rationale": "GG2.R references politbarometer.rds.",
+      "supporting_files": [
+        "code/analyze/case_studies/GG2.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.9 (fig:opinion_position_cor)",
+      "verdict": "Matched",
+      "rationale": "analyze_voter_parties_correlation.R and waves1to6_voter_parties_correlation.R reference manifesto data. The wvs_clean_1to6 data cover the earlier waves.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/analyze_voter_parties_correlation.R",
+        "code/analyze/priorities_and_model/waves1to6_voter_parties_correlation.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.10 (fig:hetero_prior_change)",
+      "verdict": "Matched",
+      "rationale": "hetero_priorities_prrp.R references prrp_profiles.rds and manifesto data.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/hetero_priorities_prrp.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.11 (fig:demo_prrp_score_bar)",
+      "verdict": "Matched",
+      "rationale": "analyze_populist_voters.R references prrp_profiles.rds, and prepare_prrp_scores.R creates the PRRP score data.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/analyze_populist_voters.R",
+        "code/process/analysis_inputs/prepare_prrp_scores.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.12 (fig:heatmap_1_4_subset)",
+      "verdict": "Matched",
+      "rationale": "waves1to6_heatmap.R references manifesto data. prepare_waves1to6_wvs_manifesto_with_indexes.R builds the 1990–1992 to 2005–2009 inputs.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/waves1to6_heatmap.R",
+        "code/process/analysis_inputs/prepare_waves1to6_wvs_manifesto_with_indexes.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.13 (fig:change_salience)",
+      "verdict": "Plausible",
+      "rationale": "analyze_party_family_positions.R or analyze_prrp_rise.R plausibly produce the salience time series from manifesto.csv. Stage A shows no figure-specific trace.",
+      "supporting_files": [
+        "code/analyze/party_positions/analyze_party_family_positions.R",
+        "code/analyze/party_positions/analyze_prrp_rise.R"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.14 (fig:corr_score_support)",
+      "verdict": "Plausible",
+      "rationale": "It needs the PRRP score (analyze_voter_opinion_trend.R, prrp_score.rds) and the vote shares in manifesto data. analyze_voter_opinion_trend.R or analyze_populist_voters.R is the likely source.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/analyze_voter_opinion_trend.R",
+        "code/analyze/voter_attributes/analyze_populist_voters.R"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.15 (fig:populist_score_country)",
+      "verdict": "Matched",
+      "rationale": "analyze_voter_opinion_trend.R references prrp_score.rds, and analyze_populist_voters.R is also relevant.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/analyze_voter_opinion_trend.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.16 (fig:opinions_change)",
+      "verdict": "Plausible",
+      "rationale": "analyze_voter_opinion_trend.R is plausibly the script for opinion trends. Stage A shows no figure-specific trace.",
+      "supporting_files": [
+        "code/analyze/voter_attributes/analyze_voter_opinion_trend.R"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.17 (fig:counterfactual_germany)",
+      "verdict": "Matched",
+      "rationale": "reserviors.R and map_populist_support.R, as for Figure 10.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/reserviors.R",
+        "code/analyze/voter_attributes/map_populist_support.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.18 (fig:prr_elm_change)",
+      "verdict": "Matched",
+      "rationale": "analyze_party_family_positions.R references manifesto and populist data. top_distinct_vars.rds is listed in the README audit.",
+      "supporting_files": [
+        "code/analyze/party_positions/analyze_party_family_positions.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.19 (fig:position_change_fix_wgt)",
+      "verdict": "Matched",
+      "rationale": "analyze_party_family_positions.R and analyze_prrp_rise.R reference manifesto and populist data.",
+      "supporting_files": [
+        "code/analyze/party_positions/analyze_party_family_positions.R",
+        "code/analyze/party_positions/analyze_prrp_rise.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.20 (fig:change_leader_demo)",
+      "verdict": "Matched",
+      "rationale": "femaleShareGraph.R references party_leaders.rds, ivs_femaleShare.RDS, wage_occ_2023 and manifesto data.",
+      "supporting_files": [
+        "code/analyze/party_positions/femaleShareGraph.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.21 (fig:dec_new_entry)",
+      "verdict": "Plausible",
+      "rationale": "smallPartyResidual.R and plotDecomposition.R are plausible sources for the new-entrant residual split. Stage A shows no trace.",
+      "supporting_files": [
+        "code/analyze/decomposition/smallPartyResidual.R",
+        "code/analyze/decomposition/plotDecomposition.R"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.22 (fig:number_of_prrp)",
+      "verdict": "Matched",
+      "rationale": "save_party_numbers.R and analyze_prrp_rise.R reference manifesto and populist data.",
+      "supporting_files": [
+        "code/analyze/party_positions/save_party_numbers.R",
+        "code/analyze/party_positions/analyze_prrp_rise.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.23 (fig:newLeaderResid)",
+      "verdict": "Matched",
+      "rationale": "newLeaderResidual.R references leader_changes.rds.",
+      "supporting_files": [
+        "code/analyze/priorities_and_model/newLeaderResidual.R",
+        "data_dependencies.md"
+      ]
+    },
+    {
+      "claim_type": "figure",
+      "claim_label": "Figure A.24 (fig:new_party_residual)",
+      "verdict": "Plausible",
+      "rationale": "smallPartyResidual.R and the decomposition scripts are plausibly named for the new-party residual counterfactual. Stage A shows no trace.",
+      "supporting_files": [
+        "code/analyze/decomposition/smallPartyResidual.R"
+      ]
+    }
+  ]
+}

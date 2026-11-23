@@ -1,0 +1,9 @@
+offline/
+data/rawdata/
+data/cleandata/
+data/intdata/
+data/saved-bootstrap/
+output/modeldata/
+output/
+code/documents/
+documentation/

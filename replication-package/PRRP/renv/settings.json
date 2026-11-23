@@ -1,0 +1,6 @@
+{
+  "snapshot.type": "explicit",
+  "use.cache": false,
+  "external.libraries": [],
+  "vcs.manage.ignores": false
+}

@@ -1,0 +1,483 @@
+{
+  "data_sources": [
+    {
+      "name": "Integrated Values Survey (IVS): World Values Survey (WVS) and European Values Study (EVS) trend file; waves 2005–2009, 2011–2013, 2017–2020 (plus earlier waves 1990–1992, 1999–2000 for appendix figures)",
+      "access_date": null,
+      "url_or_doi": null
+    },
+    {
+      "name": "Comparative Manifesto Project (CMP / Manifesto Project), incl. manifesto text (Merz et al. 2016) and DeepL translations",
+      "access_date": null,
+      "url_or_doi": null
+    },
+    {
+      "name": "The PopuList (Rooduijn et al. 2024) – classification of populist radical right parties",
+      "access_date": null,
+      "url_or_doi": null
+    },
+    {
+      "name": "Party leader demographics hand-collected from Wikipedia pages; log weekly wage by occupation from IPUMS 2023",
+      "access_date": null,
+      "url_or_doi": null
+    },
+    {
+      "name": "Share of female legislators: Weeks et al. 2023 (Männerparteien); Adams, Bracken, Gidron, Horne, O'Brien, Senk 2023; Global Legislator Database 2024",
+      "access_date": null,
+      "url_or_doi": null
+    },
+    {
+      "name": "Party Facts (Döring and Regel 2019) – linking CMP and IVS parties",
+      "access_date": null,
+      "url_or_doi": null
+    },
+    {
+      "name": "ParlGov – governing coalition status (used to drop opinion variables affected by coalition status)",
+      "access_date": null,
+      "url_or_doi": null
+    },
+    {
+      "name": "German Politbarometer (Forschungsgruppe Wahlen) – 'most important issue' question, Germany case study",
+      "access_date": null,
+      "url_or_doi": null
+    },
+    {
+      "name": "Perspective API (insult attribute) applied to manifesto clauses; Comparative Agendas Project, Polidoc, Manifesto Vault (supplementary manifesto texts)",
+      "access_date": null,
+      "url_or_doi": null
+    },
+    {
+      "name": "GPT-4o classification of manifesto clauses as pledges vs declarative statements",
+      "access_date": null,
+      "url_or_doi": null
+    },
+    {
+      "name": "Ipsos 2009 aggregate polling (UKIP/BNP support, cited as external check)",
+      "access_date": null,
+      "url_or_doi": null
+    }
+  ],
+  "data_processing_steps": [
+    {
+      "description": "Classify parties as populist radical right (PRRP) if the PopuList ever classified them as PRRP since 2005. Other party families (center-left = social democratic; center-right = Christian democratic/conservative; green = ecological; socialist) are assigned from CMP party family codes.",
+      "variables_involved": [
+        "PRRP indicator",
+        "party family"
+      ]
+    },
+    {
+      "description": "Party positions: all 56 CMP main (three-digit) variables. Economic index (19 positions, free market vs government intervention) and cultural/'society' index (11 positions, conservative vs progressive) from CMP; conservative positions added, liberal subtracted. Alternative indices (Bakker-Hobolt, Prosser, expanded Hawk-Dove, European integration, government efficiency) used in robustness.",
+      "variables_involved": [
+        "56 CMP positions",
+        "CMP economic index",
+        "CMP cultural (society) index"
+      ]
+    },
+    {
+      "description": "Leadership demographics hand-coded for party-election observations: gender, years of schooling, age, marital status, number of divorces, minority status (immigrant, non-Christian, non-white, or non-heterosexual), log average weekly wage of leader's previous occupation (IPUMS 2023); share of female legislators merged from three sources by CMP ID/Parlgov ID with closest-year match within 5 years. Missing leader demographics imputed with random forests.",
+      "variables_involved": [
+        "leader gender",
+        "leader years of schooling",
+        "leader age",
+        "leader married",
+        "number of divorces",
+        "leader minority",
+        "log occupational wage",
+        "female legislator share"
+      ]
+    },
+    {
+      "description": "Manifesto rhetoric: lexical diversity (MATTR, 200-word window, stopwords removed), average words per clause, total word count, and insult score (mean Perspective API insult score of the top 5% most insulting clauses, after DeepL translation to English). Missing/PDF-only manifestos supplemented from CAP, Polidoc, Manifesto Vault; four pairs imputed with random forests. Split-half consistency test (odd vs even sections).",
+      "variables_involved": [
+        "MATTR",
+        "words per clause",
+        "word count",
+        "insult score"
+      ]
+    },
+    {
+      "description": "Pledge-based positions: GPT-4o classifies manifesto clauses as pledges (1) or not (0); positions recomputed from pledges only; imputation by random forests for manifestos lacking annotated text; manual check of 100 clauses gave 98% agreement.",
+      "variables_involved": [
+        "pledge share by CMP position"
+      ]
+    },
+    {
+      "description": "Voter data: IVS waves 2005–2009, 2011–2013 (7 countries: Estonia, Germany, Netherlands, Poland, Slovenia, Spain, Sweden), 2017–2020; 20 European countries (Austria, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Italy, Lithuania, Netherlands, Norway, Poland, Portugal, Slovenia, Spain, Sweden, Switzerland, UK), requiring ≥70% of voters supporting a CMP-matchable party and ≥50% supporting parties existing in first and last waves. Over 100 demographic and opinion variables; excludes left-right self-placement (used as alternative outcome), confidence in parliament/parties/government (affected by coalition status), and a priorities question. Missing values imputed by random forests per country-wave (or by interpolation across waves). Weights: IVS sampling weights, normalized so each country (and each survey within country-wave) has equal weight.",
+      "variables_involved": [
+        "IVS demographics and opinions",
+        "preferred party (vote intention or party appealing most)",
+        "IVS sampling weights"
+      ]
+    },
+    {
+      "description": "Merge IVS and CMP via Party Facts (manual linking otherwise); assign party positions from election closest to mean survey date; drop respondents without CMP data within ±5 years and those supporting parties with <10 respondents. Parties defined by CMP ID.",
+      "variables_involved": [
+        "party ID",
+        "survey date",
+        "election date"
+      ]
+    },
+    {
+      "description": "PRRP score: LASSO regression predicting PRRP support in 2017–2020 from all IVS opinion variables (country indicators unpenalized and excluded when computing score); standardized fitted value predicted for voters in all waves.",
+      "variables_involved": [
+        "PRRP score"
+      ]
+    },
+    {
+      "description": "Opinion indices for reduced-form analysis: economic and cultural opinion indices from IVS variables resembling CMP index components, loadings from first principal component on pooled 2005–2009 and 2017–2020 data; left-right self-identification (1–10) regressed nonparametrically on the two indices by wave.",
+      "variables_involved": [
+        "economic opinion index",
+        "cultural opinion index",
+        "left-right self-placement"
+      ]
+    },
+    {
+      "description": "Step 1 estimation: multinomial logit utility U_ij = x_i'Φ z_j + δ_j + ε_ij, estimated separately per wave by penalized MLE with nuclear-norm penalty on Φ (proximal gradient descent; λ by cross-validation). Step 2: δ differences regressed on average party characteristics and their changes (Oaxaca-type), with β restricted to span of first k=5 right singular vectors of Φ (k=3, 7 in robustness), linear trend in β using 2011–2013 wave, weighted by party vote share, country-by-wave fixed effects; residual ζ recovered from δ.",
+      "variables_involved": [
+        "Φ",
+        "β",
+        "δ",
+        "ζ",
+        "party characteristics z",
+        "voter attributes x"
+      ]
+    },
+    {
+      "description": "Four-component decomposition of change in PRRP support 2005–2009 to 2017–2020 (priorities, attributes, party characteristics, residual) per country; order: priorities, attributes, party characteristics, residual last (ζ = −∞ for non-existent parties). Aggregated across countries with weights equal to inverse of 2017–2020 PRRP support share; total scaled to 100%; countries not in 2011–2013 wave imputed by average. 200 bootstrap replications resampling voters within wave.",
+      "variables_involved": [
+        "PRRP support share",
+        "priority component",
+        "attribute component",
+        "party characteristic component",
+        "residual component"
+      ]
+    },
+    {
+      "description": "Robustness variants: Shorrocks-Shapley average over six component orders; leave-country-out; bliss-point model (quadratic party characteristics, k=3); age replaced by cohort; added rhetoric variables; pledges-only positions; separate estimation for higher-income (Austria, Denmark, Finland, France, Germany, Iceland, Netherlands, Norway, Sweden, Switzerland, UK) and lower-income countries (Estonia, Greece, Hungary, Italy, Lithuania, Poland, Portugal, Slovenia, Spain); without demographics; k=3 and k=7; adding Czech Republic and Slovakia; dropping Greece and Italy.",
+      "variables_involved": [
+        "decomposition components"
+      ]
+    },
+    {
+      "description": "Weights analysis: voter weights w_i = x_i'Φ + β; aggregated into economic/cultural index weights (average of position weights, sign-flipped for left-wing positions); distribution compared across waves holding attributes at 2017–2020; heterogeneity by subgroup (age, sex, college, income, urban, union, PRRP score) of priority-driven PRRP increase and of change in log |w_culture|/|w_econ|.",
+      "variables_involved": [
+        "economic index weight",
+        "cultural index weight",
+        "subgroup indicators"
+      ]
+    },
+    {
+      "description": "Spatial counterfactual: predicted PRRP (National Front/AfD) support in each country in 2017–2020 using French (German) party set, characteristics and residuals and estimated priorities, varying only the country's voter attribute distribution; U.S. added with one EU question imputed.",
+      "variables_involved": [
+        "counterfactual National Front support",
+        "counterfactual AfD support"
+      ]
+    },
+    {
+      "description": "Residual decomposition into new PRRP entrants vs existing PRRP; latent demand for new parties in 2005–2009 using 2017–2020 residuals or residuals imputed from a regression on country and party-family fixed effects.",
+      "variables_involved": [
+        "new entrant residual",
+        "remaining residual",
+        "counterfactual vote share"
+      ]
+    },
+    {
+      "description": "Cross-country similarity test: for each party with >50 supporters, linear probability model of support on voter attributes within its country; correlate fitted values across party pairs from different countries and average by party family. Shy-voter check: LASSO multinomial logit predicting party support for undecided respondents.",
+      "variables_involved": [
+        "party support dummy",
+        "voter attributes",
+        "fitted values"
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "label": "Table 1 (tab:sum_stat)",
+      "title": "Descriptive Statistics",
+      "estimator": "Descriptive means (no regression)",
+      "outcome_var": null,
+      "key_regressors": [],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": null,
+      "sample_restriction": "Panel A: party characteristics (CMP economic and cultural indices, five positions that most distinguish PRRP from non-PRRP, leadership demographics incl. education, divorces, female legislator share), averages for 2005–2009 and 2017–2020 waves, PRRP vs non-PRRP, equal country weights and vote-share weights within country. Panel B: voter attributes from IVS (five key demographics incl. male, urban (city >100,000), plus five opinions with largest PRRP/non-PRRP difference, in SD units), IVS sampling weights within countries, countries equally weighted.",
+      "data_source": "CMP, leader data, IVS (table body not included in flattened text; only caption/notes)"
+    },
+    {
+      "label": "Table A.1 (tab:prrp_parties)",
+      "title": "List of Populist Radical Right Parties",
+      "estimator": null,
+      "outcome_var": null,
+      "key_regressors": [],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": null,
+      "sample_restriction": "Parties classified as PRRP in the data (PopuList)",
+      "data_source": "PopuList; CMP"
+    },
+    {
+      "label": "Table A.2 (tab:ivs_data)",
+      "title": "IVS Data",
+      "estimator": "Descriptive statistics",
+      "outcome_var": null,
+      "key_regressors": [],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": null,
+      "sample_restriction": "Final dataset: respondents matched to CMP, by IVS wave; PRRP support share is average across countries; IVS sampling weights",
+      "data_source": "IVS merged with CMP"
+    },
+    {
+      "label": "Table A.3 (tab:decomposition_table)",
+      "title": "Decomposition of the Rise in PRRP Support by Country",
+      "estimator": "Model-based counterfactual decomposition (penalized multinomial-logit MLE, two-step); bootstrap SEs",
+      "outcome_var": "Counterfactual increase in PRRP support share between 2005–2009 and 2017–2020 (columns 1–4: priorities, attributes, party characteristics, residual; column 5: total)",
+      "key_regressors": [
+        "Voter priorities component",
+        "Voter attributes component",
+        "Party characteristics component",
+        "Residual component"
+      ],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": "Standard errors from 200 bootstrap replications resampling voters within wave (no clustering)",
+      "sample_restriction": "16 countries with any PRRP support in one of the waves; last row aggregates across countries weighting by inverse of 2017–2020 PRRP support share, scaled to total of 1; IVS sampling weights",
+      "data_source": "IVS, CMP, leader data (table body not included in flattened text)"
+    },
+    {
+      "label": "Table A.4 (tab:manifesto_rhetoric_sum_stats)",
+      "title": "Manifesto Rhetoric Descriptive Statistics",
+      "estimator": "Descriptive means",
+      "outcome_var": null,
+      "key_regressors": [
+        "PRRP vs non-PRRP"
+      ],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": null,
+      "sample_restriction": "Election-party pairs (final party-election sample); 2005–2009 and 2017–2020 waves; variables: MATTR lexical diversity, words per clause, word count, insult score",
+      "data_source": "CMP manifesto texts, Perspective API"
+    },
+    {
+      "label": "Table A.5 (tab:party_entry_list)",
+      "title": "Populist Radical Right Parties Absent in the 2005–2009 Wave",
+      "estimator": null,
+      "outcome_var": null,
+      "key_regressors": [],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": null,
+      "sample_restriction": "PRRP in 2017–2020 data but not 2005–2009 (text lists seven: Estonian Conservative People's Party, AfD, Golden Dawn, Brothers of Italy, Forum for Democracy, Sweden Democrats, UKIP)",
+      "data_source": "IVS, CMP, PopuList"
+    },
+    {
+      "label": "Table A.6 (tab:manifesto_rhetoric_consistency)",
+      "title": "Internal Consistency of Manifesto Rhetoric",
+      "estimator": "Split-half (odd vs even sections) correlation",
+      "outcome_var": "Correlation of rhetoric measures across odd/even manifesto sections (text reports 0.64–0.87)",
+      "key_regressors": [],
+      "controls": [],
+      "fixed_effects": [
+        "Country-specific means subtracted (demeaning)"
+      ],
+      "clustering": null,
+      "sample_restriction": "All manifestos with complete observations; manifesto split into 10 equal sections; word count excluded",
+      "data_source": "Manifesto texts"
+    },
+    {
+      "label": "Table A.7 (tab:ivs_data_match)",
+      "title": "IVS Data Matched with CMP",
+      "estimator": "Sample counts",
+      "outcome_var": null,
+      "key_regressors": [],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": null,
+      "sample_restriction": "Row 1 all respondents in analyzed country-waves; Row 2 those supporting a specific party; Row 3 matched to CMP election within 5 years; Row 4 final sample dropping parties with <10 respondents",
+      "data_source": "IVS, CMP"
+    },
+    {
+      "label": "Table A.8 (tab:shy_voters)",
+      "title": "Observed and Predicted Support by Party Family Over Time",
+      "estimator": "LASSO multinomial logit (separately by wave) for predicting support among respondents who did not name a party",
+      "outcome_var": "Observed vs predicted party-family support share (2005–2009, 2017–2020)",
+      "key_regressors": [
+        "IVS voter attributes (all opinion/demographic variables)"
+      ],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": null,
+      "sample_restriction": "Observed: respondents naming a party; predicted: respondents answering neither 'first choice' nor 'appeals most' question; IVS sampling weights",
+      "data_source": "IVS"
+    },
+    {
+      "label": "Table B.1 (tab:manifesto_vars)",
+      "title": "CMP position variables and index composition (Supplementary data table; no caption title in text)",
+      "estimator": null,
+      "outcome_var": null,
+      "key_regressors": [],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": null,
+      "sample_restriction": "All 56 major (three-digit) CMP positions, with membership in economic, cultural, European integration, alternative economic/social, Hawk-Dove, and government efficiency indices",
+      "data_source": "CMP"
+    },
+    {
+      "label": "Table B.2 (tab:leader_code_book)",
+      "title": "Leadership demographics and rhetoric variable definitions",
+      "estimator": null,
+      "outcome_var": null,
+      "key_regressors": [],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": null,
+      "sample_restriction": "Variables for party-election pairs in final analysis data",
+      "data_source": "Wikipedia, IPUMS, external legislator datasets, manifesto texts"
+    },
+    {
+      "label": "Table B.3 (tab:ivs_vars)",
+      "title": "IVS variables included in the data",
+      "estimator": null,
+      "outcome_var": null,
+      "key_regressors": [],
+      "controls": [],
+      "fixed_effects": [],
+      "clustering": null,
+      "sample_restriction": "All IVS demographic and opinion variables used (>100), with processing and membership in economic/cultural opinion indices",
+      "data_source": "IVS"
+    }
+  ],
+  "figures": [
+    {
+      "label": "Figure 1 (fig:populist_support)",
+      "description": "Average PRRP vote share over time across the European countries in the data (five-year window averages of CMP-party vote shares in parliamentary elections); gray bars mark IVS survey waves."
+    },
+    {
+      "label": "Figure 3 (fig:weights_static)",
+      "description": "25th/50th/75th percentiles of voting weights on economic and cultural indices and eight individual manifesto positions, by supported party family, 2017–2020 wave."
+    },
+    {
+      "label": "Figure 4 (fig:decomposition)",
+      "description": "Waterfall of main decomposition of rise in PRRP support 2005–2009 to 2017–2020 into priorities, attributes, party characteristics, residual (total = 100%), aggregated across countries with inverse-2017–2020-PRRP-share weights."
+    },
+    {
+      "label": "Figure 5 (fig:decomposition_robustness)",
+      "description": "Decomposition robustness waterfalls: A Shorrocks-Shapley average over orders; B leave-country-out; C bliss-point model; D cohort replacing age; E added rhetoric variables; F pledge-based positions; G higher-income countries; H lower-income countries."
+    },
+    {
+      "label": "Figure 6 (fig:weights_dynamic)",
+      "description": "Distributions of weights on CMP economic and cultural indices for 2005–2009 vs 2017–2020 priorities, with voter attributes fixed at 2017–2020."
+    },
+    {
+      "label": "Figure 7 (fig:heat_map)",
+      "description": "Heat map of change in predicted left-right self-identification (1–10) between 2005–2009 and 2017–2020 as a function of economic and cultural opinion index (nonparametric regression); contours at ±0.1."
+    },
+    {
+      "label": "Figure 8 (fig:hetero_prior_prrp)",
+      "description": "Relative increase in PRRP support due to priority change by subgroup (age, sex, college, income, urban, union, above/below median PRRP score), relative to full population."
+    },
+    {
+      "label": "Figure 9 (fig:populist_score_agg)",
+      "description": "Trends by survey wave in PRRP score and eight opinion variables most correlated with it, by country (thin gray) and average (thick blue)."
+    },
+    {
+      "label": "Figure 10 (fig:counterfactual_france)",
+      "description": "Map of counterfactual National Front support in 2017–2020 using each country's voter attributes with French choice set (including U.S.)."
+    },
+    {
+      "label": "Figure 11 (fig:prr_index_change)",
+      "description": "Five-year moving averages of CMP economic and cultural indices by party family (PRRP, center-right, center-left, socialist, green)."
+    },
+    {
+      "label": "Figure A.2 (fig:populist_score_cor)",
+      "description": "Voter attributes most strongly correlated with the PRRP score (2017–2020, weighted)."
+    },
+    {
+      "label": "Figure A.3 (fig:party_correlation)",
+      "description": "Correlation matrix of fitted party-support predictions (linear probability models) across party pairs from different countries, with average correlations by party family."
+    },
+    {
+      "label": "Figure A.4 (fig:phi_all)",
+      "description": "Voter attributes with ten largest coefficients in weight indices: (a) economic and cultural indices; (b) older-white-men and non-establishment leader demographic indices."
+    },
+    {
+      "label": "Figure A.5 (fig:decomposition_robustness_app)",
+      "description": "Additional decomposition robustness: main, excluding demographics, k=3, k=7, adding Czech Republic and Slovakia, excluding Greece and Italy."
+    },
+    {
+      "label": "Figure A.6 (fig:alternative_cmp)",
+      "description": "Weight distributions 2005–2009 vs 2017–2020 for Bakker-Hobolt and Prosser alternative economic/cultural indices."
+    },
+    {
+      "label": "Figure A.7 (fig:alternative_indices)",
+      "description": "Weight distributions 2005–2009 vs 2017–2020 for expanded Hawk-Dove, European integration, and government efficiency indices."
+    },
+    {
+      "label": "Figure A.8 (fig:germany_case_study)",
+      "description": "Stacked bars of German Politbarometer 'most important issue' categories (economics, culture ex-immigration, immigration, other) over time."
+    },
+    {
+      "label": "Figure A.9 (fig:opinion_position_cor)",
+      "description": "Binned scatter plots of voter opinion indices (economic, cultural) vs positions of preferred party; (a) 2005–2009 vs 2017–2020, (b) earlier waves 1990–1992 and 1999–2000 on subset of countries/variables."
+    },
+    {
+      "label": "Figure A.10 (fig:hetero_prior_change)",
+      "description": "Average change in log ratio of absolute cultural to economic weights (2005–2009 to 2017–2020) by subgroup with 95% CIs and p-values for subgroup differences."
+    },
+    {
+      "label": "Figure A.11 (fig:demo_prrp_score_bar)",
+      "description": "Average weighted PRRP score by subpopulation, 2017–2020."
+    },
+    {
+      "label": "Figure A.12 (fig:heatmap_1_4_subset)",
+      "description": "Heat maps of change in predicted left-right self-identification: (a) 1990–1992 to 2005–2009, (b) 2005–2009 to 2017–2020, on restricted country/variable subset."
+    },
+    {
+      "label": "Figure A.13 (fig:change_salience)",
+      "description": "Five-year moving averages of manifesto shares devoted to economic and cultural topics since 1990."
+    },
+    {
+      "label": "Figure A.14 (fig:corr_score_support)",
+      "description": "Scatter by country of change in average PRRP score (2005–2009 to 2017–2020) vs change in PRRP vote share (2005 to 2017)."
+    },
+    {
+      "label": "Figure A.15 (fig:populist_score_country)",
+      "description": "Density of voters' PRRP score by country and wave (2005–2009 vs 2017–2020)."
+    },
+    {
+      "label": "Figure A.16 (fig:opinions_change)",
+      "description": "Coefficients (with 95% CIs) on survey year from regressions of each opinion variable (SD units) on year and country fixed effects, for opinions that changed most 2005–2009 to 2017–2020."
+    },
+    {
+      "label": "Figure A.17 (fig:counterfactual_germany)",
+      "description": "Map of counterfactual AfD support in 2017–2020 using each country's voter attributes with German choice set."
+    },
+    {
+      "label": "Figure A.18 (fig:prr_elm_change)",
+      "description": "Five-year moving averages of manifesto shares for the six positions most distinguishing PRRP from other parties, by party family."
+    },
+    {
+      "label": "Figure A.19 (fig:position_change_fix_wgt)",
+      "description": "Cumulative within-party changes in CMP economic and cultural indices since 2005 by party family with initial-vote-share weights."
+    },
+    {
+      "label": "Figure A.20 (fig:change_leader_demo)",
+      "description": "Five-year moving averages of share of male legislators, probability of older white male leader, and non-establishment leader by party family."
+    },
+    {
+      "label": "Figure A.21 (fig:dec_new_entry)",
+      "description": "Waterfall decomposition with residual split into new PRRP entrants and remaining residual."
+    },
+    {
+      "label": "Figure A.22 (fig:number_of_prrp)",
+      "description": "Average number of PRRP per country receiving at least 1% of vote over time (five-year windows, CMP)."
+    },
+    {
+      "label": "Figure A.23 (fig:newLeaderResid)",
+      "description": "Density of change in party residual between first and last waves for parties with same vs new leaders."
+    },
+    {
+      "label": "Figure A.24 (fig:new_party_residual)",
+      "description": "25th/50th/75th percentiles of counterfactual 2005–2009 vote shares of new PRRP vs non-PRRP entrants using family/country-imputed residuals."
+    }
+  ]
+}

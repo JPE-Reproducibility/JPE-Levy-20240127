@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 RCPP_PARALLEL_NUM_THREADS=1
+export R_HOME="$root/offline/runtime"
+export RHOME="$R_HOME"
+export R_LIBS_USER="$root/offline/empty-library"
+export R_LIBS_SITE="$root/offline/empty-library"
+export R_ENVIRON_USER=/dev/null
+export R_PROFILE_USER=/dev/null
+export RENV_PATHS_ROOT="$root/renv/state"
+export RENV_PATHS_LIBRARY="$root/renv/library"
+export RENV_PATHS_SANDBOX="$root/renv/sandbox"
+export RENV_CONFIG_SANDBOX_ENABLED=FALSE
+export RENV_CONFIG_CACHE_ENABLED=FALSE
+export RENV_CONFIG_AUTO_SNAPSHOT=FALSE
+if [[ ! -x "$R_HOME/bin/Rscript" ]]; then
+  echo 'Run bash offline/setup.sh first.' >&2
+  exit 1
+fi
+exec "$R_HOME/bin/Rscript" "$@"

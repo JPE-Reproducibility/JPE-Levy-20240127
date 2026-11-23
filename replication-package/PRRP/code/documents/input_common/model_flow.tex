@@ -1,0 +1,61 @@
+\begin{tikzpicture}[
+  font=\small,
+  node distance=10mm and 18mm,
+  box/.style={draw, rounded corners, align=center, inner sep=6pt},
+  arr/.style={-{Latex[length=2.2mm]}, line width=0.6pt}
+]
+
+% =========================
+% Middle column (MIDDLE): positions -> weights -> residual
+% =========================
+\node[box] (z)
+{$z_j$\\\footnotesize Party characteristics\\ \footnotesize (CMP +\\leadership demographics)};
+
+\node[box, below=of z] (w)
+{$w_i = x_i'\Phi + \beta$ \eqref{eq:weights}\\[2pt]
+\footnotesize Weights};
+
+\node[box, below=of w] (zeta)
+{$\zeta_j$\\\footnotesize Common residual\\ \footnotesize(Estimated)};
+
+% =========================
+% Left column (LEFT): align x and (\Phi,\beta) on same x-coordinate
+% and make vertical distance symmetric around weights
+% =========================
+\node[box, left=28mm of w, yshift=14mm] (x)
+{$x_i$\\\footnotesize Voter attributes\\ \footnotesize(IVS)};
+
+% Move parameters slightly up vs previous version
+\node[box, below=26mm of x] (PhiBeta)
+{$(\Phi,\beta)$\\\footnotesize Priorities\\ \footnotesize(Estimated)};
+
+% =========================
+% Right column (RIGHT): utility aligned with weights (reduced spacing)
+% =========================
+\node[box, right=30mm of w] (U)
+{$U_{ij} = w_i' z_j + \zeta_j+\varepsilon_{ij}$ \eqref{eq:utility}\\[2pt]
+\footnotesize Utility};
+
+% =========================
+% Arrow endpoints (offset so arrows don't overlap)
+% =========================
+% Two distinct entry points into w.west
+\coordinate (w_in_up) at ($(w.west)+(0,0.18)$);
+\coordinate (w_in_dn) at ($(w.west)+(0,-0.18)$);
+
+% Three distinct entry points into U.west
+\coordinate (U_in_up)  at ($(U.west)+(0,0.26)$);
+\coordinate (U_in_mid) at ($(U.west)+(0,0.00)$);
+\coordinate (U_in_dn)  at ($(U.west)+(0,-0.26)$);
+
+% =========================
+% Arrows
+% =========================
+\draw[arr] (x.east) -- (w_in_up);
+\draw[arr] (PhiBeta.east) -- (w_in_dn);
+
+\draw[arr] (z.east) -- (U_in_up);
+\draw[arr] (w.east) -- (U_in_mid);
+\draw[arr] (zeta.east) -- (U_in_dn);
+
+\end{tikzpicture}
