@@ -1,6 +1,15 @@
-title: "Stand-in title"
-author: "Dr Prof James 'JayJay' Author"
-paper_id: 12345678
+title: "Decomposing the Rise of the Populist Radical Right"
+author: "Levy"
 round: 1
-repo: "https://www.github.com/standin"
-dropbox_rel_path: "JPE/Author-12345678/1"
+repo: "https://github.com/JPE-Reproducibility/JPE-Levy-20240127"
+paper_id: 20240127
+journal: "JPE"
+paper_slug: "Levy-20240127"
+dropbox_rel_path: "JPE/Levy-20240127/1"
+package_size_gb: 1.09
+package_max_file_size_gb: 2
+package_max_pkg_size_gb: 10
+large_reports_url: "https://www.dropbox.com/scl/fo/1l6em1pdoidn3cxm38jnc/AC_wFsr6p2kIfuq_BNAC5M8?rlkey=tx7lxyv0lx1ssc2905bafoees&dl=0"
+paper_source_subfolder: "paper-author"
+paper_source_round: 1
+paper_source_dropbox_rel_path: "JPE/Levy-20240127/1"
