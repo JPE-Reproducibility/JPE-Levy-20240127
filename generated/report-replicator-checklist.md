@@ -1,6 +1,6 @@
 # Replicator Checklist
 
-_Generated 2026-11-23T21:34:25.550 -- a deterministic summary of what the automated checks flagged. This doesn't replace reading the full reports in `generated/`; it's a starting point for where to look first._
+_Generated 2026-11-23T22:02:35.521 -- a deterministic summary of what the automated checks flagged. This doesn't replace reading the full reports in `generated/`; it's a starting point for where to look first._
 
 ## Crosscheck: claims vs. package (Stage D)
 
@@ -77,7 +77,25 @@ The structural checklist flagged these required sections as missing:
 
 ## README review (Stage R)
 
-_(not available -- Stage R LLM README review hasn't run)_
+## Final Assessment
+
+**Verdict: Needs major revision**, pending resolution of one licensing finding, plus one mandatory verification step the editor must perform.
+
+### Prioritized fixes
+
+1. **(Blocking) Resolve the `data/cleandata/` redistribution rights issue.** The CC BY 4.0 license on author-created data covers a directory that contains derived individual-level WVS/EVS survey microdata. The LICENSE's own hedge ("to the extent of the authors' rights in them") contradicts the rights checkbox's claim of "documented permission to redistribute." Authors must supply actual permission documentation from WVS/GESIS/Manifesto Project covering the derived extract, or restructure the package so restricted-derived data isn't shipped under a license implying free redistribution.
+2. **(Pre-condition for everything else) Verify package completeness on disk.** I could not confirm that `data/` (all four subtrees) and `documentation/input-inventory.csv` are actually present and populated in the submitted archive — every path I tried under those directories returned "not found" in this review environment, which may be a local access artifact rather than a real gap, but it must be independently confirmed with a full directory listing before certifying §3.
+3. Fix the disk-space contradiction (5 GB headline vs. 15.4 GiB measured) by splitting figures explicitly by `make fresh` vs. `make all`.
+4. Add a data-preservation commitment statement.
+5. Add an Acknowledgements section (template provenance).
+6. Add the canonical "analyzes external data" / public-availability-category sentences for checklist matching.
+7. Address Google Perspective API redistribution terms for the derived insult scores.
+8. Note the untested non-Apple-Silicon path more prominently, and consider asking authors to verify it once before submission.
+9. Minor: fix the line-321 reference format, note resource-recording is `make all`-only, flag the extrapolated worker/RAM table as "estimated, not measured," and explain the Makefile→`masterFile.R` dispatch mechanism in §5.
+
+### General observation
+
+Apart from the licensing question, this is one of the more rigorous and specific READMEs I've reviewed against this checklist — the exhibit mapping, data availability table, and instructions sections are genuinely exemplary and should be used as a positive example for other submissions. The fixes above are almost all additive text; only item 1 requires a substantive decision from the authors.
 
 ## Referee review (refine.ink)
 
